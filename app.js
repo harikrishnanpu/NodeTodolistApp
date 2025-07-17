@@ -27,3 +27,4 @@ app.get('/signup',(req,res)=>{
 
 
 
+app.listen(3000)
