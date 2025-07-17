@@ -1,0 +1,36 @@
+
+
+
+<button id="add">add</button>
+
+<p>Cart Count: <span id="cartCount">0</span></p>
+
+<button id="minus">minus</button>
+
+<script>
+
+    const addButton = document.getElementById('add');
+    const minusButton = document.getElementById('minus');
+    const cartCount = document.getElementById('cartCount');
+
+
+    addButton.addEventListener('click', async (e)=>{
+        const response = await fetch('/add', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ count: 1 })
+        });
+
+
+        
+
+        if(response.ok){
+            cartCount.textContent = 
+        }
+
+    })
+
+
+
+
+</script>
