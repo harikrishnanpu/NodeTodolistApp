@@ -1,30 +1,21 @@
-
-// ==> express ==> req,res,next
-
-const harisession = require('express-session');
-
-// server ==> memmory ==> session
-
-const app = require('express')();
-
-app.set('view engine','ejs');
-
-// ==> toeken ==> verify ==> server ==> session ==> session  
-
-app.use(harisession({ //==> COOCKIE ==/. TOKEN => TOKENID ==> session
-    secret: 'MY-SECRET',
-    name: 'harikrishnan.sid', //==?> conncect.sid
-    saveUninitialized: false,
-    resave: true, // when session. ==> change ==> re saving the session token
-})) // ==> req , res , next
-// express => views
-
-
-app.get('/signup',(req,res)=>{
-    console.log(req.session.harikrishnan);
-    res.render('user/signup')
-});
+const express = require('express');
+const path = require('node:path');
+const userRouter = require('./routes/userRouter');
+const app = express();
+var expressLayouts = require('express-ejs-layouts');
 
 
 
-app.listen(3000)
+
+app.use(express.json());
+app.use(expressLayouts);
+app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname,'public')));
+app.set('layout', 'layouts/layout');
+
+
+
+app.use('/',userRouter);
+
+
+module.exports = app;
