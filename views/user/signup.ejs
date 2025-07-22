@@ -10,49 +10,58 @@
 
             <form id="signupForm" class="signup-form">
                 <div class="form-group">
-                    <label for="inputUsername" class="form-label">
-                        <i class="icon">👤</i>
-                        Username
-                    </label>
-                    <input type="text" class="form-control" id="inputUsername" placeholder="Enter your username">
+                    <div class="floating-label-group">
+                        <input type="text" class="form-control" id="inputUsername" placeholder=" ">
+                        <label for="inputUsername" class="floating-label">
+                            <!-- <i class="icon">👤</i> -->
+                            Username
+                        </label>
+                    </div>
                     <div id="username-error" class="field-error"></div>
                 </div>
 
                 <div class="form-group">
-                    <label for="inputEmail" class="form-label">
-                        <i class="icon">📧</i>
-                        Email Address
-                    </label>
-                    <input type="email" class="form-control" id="inputEmail" placeholder="Enter your email">
+                    <div class="floating-label-group">
+                        <input type="email" class="form-control" id="inputEmail" placeholder=" ">
+                        <label for="inputEmail" class="floating-label">
+                            <!-- <i class="icon">📧</i> -->
+                            Email Address
+                        </label>
+                    </div>
                     <div class="help-text">We'll never share your email with anyone else.</div>
                     <div id="email-error" class="field-error"></div>
                 </div>
 
+                <!-- Password Field -->
                 <div class="form-group">
-                    <label for="inputPassword" class="form-label">
-                        <i class="icon">🔒</i>
-                        Password
-                    </label>
-                    <input type="password" class="form-control" id="inputPassword" placeholder="Create a strong password">
+                    <div class="floating-label-group">
+                        <input type="password" class="form-control" id="inputPassword" placeholder=" ">
+                        <label for="inputPassword" class="floating-label">
+                            <!-- <i class="icon">🔒</i> -->
+                            Password
+                        </label>
+                        <button type="button" class="toggle-password" data-target="inputPassword">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
                     <div id="password-error" class="field-error"></div>
                 </div>
-
+                
+                <!-- Confirm Password Field -->
                 <div class="form-group">
-                    <label for="inputConfirmPassword" class="form-label">
-                        <i class="icon">🔐</i>
-                        Confirm Password
-                    </label>
-                    <input type="password" class="form-control" id="inputConfirmPassword" placeholder="Confirm your password">
+                    <div class="floating-label-group">
+                        <input type="password" class="form-control" id="inputConfirmPassword" placeholder=" ">
+                        <label for="inputConfirmPassword" class="floating-label">
+                            <!-- <i class="icon">🔐</i> -->
+                            Confirm Password
+                        </label>
+                        <button type="button" class="toggle-password" data-target="inputConfirmPassword">
+                            <i class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
                     <div id="confirm-password-error" class="field-error"></div>
                 </div>
-
-                <div class="form-check-container">
-                    <input type="checkbox" class="form-check-input" id="termsCheck">
-                    <label class="form-check-label" for="termsCheck">
-                        I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a>
-                    </label>
-                </div>
-
+            
                 <button type="submit" class="submit-btn">
                     <span class="btn-text">Create Account</span>
                     <span class="btn-icon">→</span>
@@ -136,40 +145,86 @@
         margin-bottom: 25px;
     }
 
-    .form-label {
-        display: flex;
-        align-items: center;
-        font-weight: 600;
-        color: #333;
+    /* Floating Label Styles */
+    .floating-label-group {
+        position: relative;
         margin-bottom: 8px;
-        font-size: 0.95rem;
-    }
-
-    .icon {
-        margin-right: 8px;
-        font-size: 1.1rem;
     }
 
     .form-control {
         width: 100%;
-        padding: 14px 16px;
+        padding: 18px 16px 6px 16px;
         border: 2px solid #e1e8ed;
         border-radius: 12px;
         font-size: 1rem;
         transition: all 0.3s ease;
         background: #fafbfc;
+        outline: none;
     }
 
     .form-control:focus {
-        outline: none;
         border-color: #667eea;
         box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         background: white;
         transform: translateY(-1px);
     }
 
-    .form-control::placeholder {
-        color: #9ca3af;
+    .floating-label {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        color: #5c616c;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: none;
+        display: flex;
+        align-items: center;
+        z-index: 1;
+    }
+
+    .floating-label .icon {
+        margin-right: 8px;
+        font-size: 1.1rem;
+    }
+
+    /* When input is focused or has content */
+    .form-control:focus + .floating-label,
+    .form-control:not(:placeholder-shown) + .floating-label {
+        top: -8px;
+        transform: translateY(0);
+        font-size: 0.75rem;
+        color: #667eea;
+        font-weight: 600;
+        background: white;
+        /* padding: 0 4px; */
+    }
+
+    .form-control:focus + .floating-label .icon,
+    .form-control:not(:placeholder-shown) + .floating-label .icon {
+        font-size: 0.85rem;
+    }
+
+    /* Password toggle button positioning */
+    .toggle-password {
+        position: absolute;
+        top: 50%;
+        right: 14px;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        font-size: 1rem;
+        color: #6b7280;
+        cursor: pointer;
+        padding: 4px;
+        z-index: 2;
+        transition: color 0.3s ease;
+    }
+
+    .toggle-password:hover {
+        color: #667eea;
     }
 
     .help-text {
@@ -196,35 +251,11 @@
         text-align: center;
         border: 1px solid rgba(239, 68, 68, 0.2);
         min-height: 20px;
+        display: none;
     }
 
-    .form-check-container {
-        margin-bottom: 30px;
-        display: flex;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .form-check-input {
-        margin-top: 4px;
-        accent-color: #667eea;
-        transform: scale(1.1);
-    }
-
-    .form-check-label {
-        font-size: 0.9rem;
-        color: #4b5563;
-        line-height: 1.4;
-    }
-
-    .terms-link {
-        color: #667eea;
-        text-decoration: none;
-        font-weight: 500;
-    }
-
-    .terms-link:hover {
-        text-decoration: underline;
+    .error-message:not(:empty) {
+        display: block;
     }
 
     .submit-btn {
@@ -305,6 +336,10 @@
         animation: shake 0.4s ease-in-out;
     }
 
+    .form-control.error + .floating-label {
+        color: #ef4444;
+    }
+
     @keyframes shake {
         0%, 100% { transform: translateX(0); }
         25% { transform: translateX(-4px); }
@@ -324,6 +359,17 @@
             opacity: 1;
             transform: translateY(0);
         }
+    }
+
+    /* Enhanced focus effects */
+    .floating-label-group:focus-within .form-control {
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        background: white;
+    }
+
+    .floating-label-group:focus-within .floating-label {
+        color: #667eea;
     }
 </style>
 
@@ -401,10 +447,10 @@
         }
 
         // General error message
-        if (!email || !password || !username) {
-            errorMsg.textContent = 'Please fill in all required fields';
-            return;
-        }
+        // if (!email || !password || !username) {
+        //     // errorMsg.textContent = 'Please fill in all required fields';
+        //     return;
+        // }
 
         if (hasError) return;
 
@@ -451,5 +497,21 @@
                 submitBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
             }, 2000);
         }
+    });
+
+    // Password toggle functionality
+    document.querySelectorAll('.toggle-password').forEach(button => {
+        button.addEventListener('click', () => {
+            const inputId = button.getAttribute('data-target');
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+
+            const isPassword = input.getAttribute('type') === 'password';
+            input.setAttribute('type', isPassword ? 'text' : 'password');
+
+            // Toggle Font Awesome classes
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
     });
 </script>
