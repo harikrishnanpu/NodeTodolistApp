@@ -1,24 +1,14 @@
 <div class="signup-container">
     <div class="signup-card">
         <div class="card-header">
-            <h2 class="signup-title">Create Account</h2>
+            <h2 class="signup-title">Login Account</h2>
             <p class="signup-subtitle">Join us and start your journey</p>
         </div>
         
         <div class="card-body">
             <p id="errorMsg" class="error-message"></p>
 
-            <form id="signupForm" class="signup-form">
-                <div class="form-group">
-                    <div class="floating-label-group">
-                        <input type="text" class="form-control" id="inputUsername" placeholder=" ">
-                        <label for="inputUsername" class="floating-label">
-                            <!-- <i class="icon">👤</i> -->
-                            Username
-                        </label>
-                    </div>
-                    <div id="username-error" class="field-error"></div>
-                </div>
+            <form id="signinForm" class="signup-form">
 
                 <div class="form-group">
                     <div class="floating-label-group">
@@ -46,30 +36,16 @@
                     </div>
                     <div id="password-error" class="field-error"></div>
                 </div>
-                
-                <!-- Confirm Password Field -->
-                <div class="form-group">
-                    <div class="floating-label-group">
-                        <input type="password" class="form-control" id="inputConfirmPassword" placeholder=" ">
-                        <label for="inputConfirmPassword" class="floating-label">
-                            <!-- <i class="icon">🔐</i> -->
-                            Confirm Password
-                        </label>
-                        <button type="button" class="toggle-password" data-target="inputConfirmPassword">
-                            <i class="fa-solid fa-eye"></i>
-                        </button>
-                    </div>
-                    <div id="confirm-password-error" class="field-error"></div>
-                </div>
+            
             
                 <button type="submit" class="submit-btn">
-                    <span class="btn-text">Create Account</span>
+                    <span class="btn-text">Login</span>
                     <span class="btn-icon">→</span>
                 </button>
             </form>
 
             <div class="login-link">
-                Already have an account? <a href="#" class="link">Sign in</a>
+                Don't have an account? <a href="/signup" class="link">Sign Up</a>
             </div>
         </div>
     </div>
@@ -374,29 +350,22 @@
 </style>
 
 <script>
-    const form = document.getElementById('signupForm');
+    const form = document.getElementById('signinForm');
     
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const username = document.getElementById('inputUsername').value;
         const email = document.getElementById('inputEmail').value;
         const password = document.getElementById('inputPassword').value;
-        const confirmPassword = document.getElementById('inputConfirmPassword').value;
 
-        // Get error elements
-        const usernameError = document.getElementById('username-error');
         const emailError = document.getElementById('email-error');
         const passwordError = document.getElementById('password-error');
-        const confirmPasswordError = document.getElementById('confirm-password-error');
         const errorMsg = document.getElementById('errorMsg');
         let hasError = false;
 
         // Clear previous errors and error styling
-        usernameError.textContent = '';
         emailError.textContent = '';
         passwordError.textContent = '';
-        confirmPasswordError.textContent = '';
         errorMsg.textContent = '';
         
         // Remove error styling
@@ -404,12 +373,6 @@
             input.classList.remove('error');
         });
 
-        // Validate username
-        if (!username) {
-            usernameError.textContent = 'Username is required';
-            document.getElementById('inputUsername').classList.add('error');
-            hasError = true;
-        }
 
         // Validate email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -435,16 +398,6 @@
             hasError = true;
         }
 
-        // Validate confirm password
-        if (!confirmPassword) {
-            confirmPasswordError.textContent = 'Please confirm your password';
-            document.getElementById('inputConfirmPassword').classList.add('error');
-            hasError = true;
-        } else if (password !== confirmPassword) {
-            confirmPasswordError.textContent = 'Passwords do not match';
-            document.getElementById('inputConfirmPassword').classList.add('error');
-            hasError = true;
-        }
 
         // General error message
         // if (!email || !password || !username) {
@@ -460,23 +413,23 @@
         const btnIcon = document.querySelector('.btn-icon');
         
         submitBtn.disabled = true;
-        btnText.textContent = 'Creating Account...';
+        btnText.textContent = 'loading...';
         btnIcon.textContent = '⏳';
 
         try {
-            const res = await fetch('/signup', {
+            const res = await fetch('/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username, email, password, confirmPassword })
+                body: JSON.stringify({ email, password })
             });
             
             const data = await res.json();
-            console.log(data);
+
             
             if (res.ok) {
-                btnText.textContent = 'Account Created!';
+                btnText.textContent = 'Success!';
                 btnIcon.textContent = '✓';
                 submitBtn.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
                 window.location.href = '/';
@@ -488,10 +441,9 @@
             console.error('Error:', error);
             errorMsg.textContent = 'Network error. Please check your connection and try again.';
         } finally {
-            // Reset button after delay
             setTimeout(() => {
                 submitBtn.disabled = false;
-                btnText.textContent = 'Create Account';
+                btnText.textContent = 'Login';
                 btnIcon.textContent = '→';
                 submitBtn.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
             }, 2000);

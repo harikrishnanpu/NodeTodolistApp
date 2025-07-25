@@ -1,9 +1,18 @@
-const { addNewUser } = require("../services/userServices");
+const { addNewUser, loginUser } = require("../services/userServices");
+const jwt = require('jsonwebtoken')
 
+
+
+
+const renderHomePage = async (req,res) => {
+    res.render('user/home')
+}
 
 const renderSignupPage = async (req,res) =>{
     res.render('user/signup')
 }
+
+
 const signup = async(req,res) => {
     const {username, email,password, confirmPassword} = req.body;
     console.log('User submitte:', username, email, password, confirmPassword );
@@ -29,13 +38,19 @@ const registerNewUser = async (req,res) => {
             return res.status(400).json({message: 'all fields are required'})
         }
 
-
         const user = await addNewUser(req.body); // function ==> throw ==> goes to the catch block of this function
 
+        // ==== user created ======
+
+        const token = jwt.sign({ userId:  user._id }, process.env.JWT_SECRET)
+
+        res.cookie('HariToken', token, {
+            maxAge: 24 * 60 * 60 * 1000 , 
+            httpOnly: true,
+            sameSite: 'Strict'
+        } )
 
         res.status(201).json({ message: 'user created successfully', success: true  })
-
-
 
     }catch(err){
 
@@ -45,4 +60,47 @@ const registerNewUser = async (req,res) => {
 }
 
 
-module.exports = { renderSignupPage , registerNewUser };
+
+const renderLoginPage = async (req,res) => {
+
+    try{
+        res.render('user/login')
+    }catch(err){
+        res.status(500).json({message: err.message, success: false})
+
+    }
+
+}
+
+
+const loginUserAccount = async (req,res) => {
+    try{
+
+        const { email , password  } = req.body;
+
+        if(!email.trim() || !password.trim()){
+            throw new Error('all fields are required')
+        }
+
+        const user = await loginUser(req.body);
+
+
+        const token = jwt.sign({ userId:  user._id }, process.env.JWT_SECRET)
+
+        res.cookie('HariToken', token, {
+            maxAge: 24 * 60 * 60 * 1000 , 
+            httpOnly: true,
+            sameSite: 'Strict'
+        })
+
+        res.status(200).json({message: 'user logged in', succes: true})
+
+    }catch(err){
+
+        res.status(500).json({message: err.message, succes: false})
+
+    }
+}
+
+
+module.exports = { renderSignupPage , registerNewUser, renderLoginPage , loginUserAccount, renderHomePage};
