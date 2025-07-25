@@ -34,4 +34,33 @@ const addNewUser = async (userData) => {
 }
 
 
-module.exports = { addNewUser  }
+
+const loginUser = async (userData) =>{
+
+    try{
+
+        const { email , password  } =  userData;
+
+
+        const user = await UserModel.findOne({ email });
+
+        if(!user){
+            throw new Error('user not found')
+        }
+
+        const compareResult = await bcrypt.compare(password, user.password)
+
+        if(!compareResult){
+            throw new Error('user password not match')
+        }
+
+        return user
+
+    }catch(err){
+        throw new Error(err.message)
+    }
+
+}
+
+
+module.exports = { addNewUser, loginUser  }
