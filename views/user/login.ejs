@@ -350,6 +350,20 @@
 </style>
 
 <script>
+
+
+const urlQueries = new URLSearchParams(window.location.search);
+const errorMessageFromQuery =  urlQueries.get('error');
+
+if(errorMessageFromQuery){
+        const errorMsg = document.getElementById('errorMsg');
+
+        errorMsg.innerText = errorMessageFromQuery
+
+}
+
+
+
     const form = document.getElementById('signinForm');
     
     form.addEventListener('submit', async (e) => {

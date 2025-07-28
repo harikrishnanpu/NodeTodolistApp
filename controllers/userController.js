@@ -3,27 +3,18 @@ const jwt = require('jsonwebtoken')
 
 
 
+const renderLandingPage= async (req,res) => {
+    res.render('user/landing')
+ }
 
 const renderHomePage = async (req,res) => {
     res.render('user/home')
 }
 
+
 const renderSignupPage = async (req,res) =>{
     res.render('user/signup')
 }
-
-
-const signup = async(req,res) => {
-    const {username, email,password, confirmPassword} = req.body;
-    console.log('User submitte:', username, email, password, confirmPassword );
-
-    if(email === "test@example.com" && password === '123456'){
-        res.json({message: 'Sign in successfull'})
-    } else {
-        res.status(401).json({error:'Invalid credentials'})
-    }
-}
-
 
 
 const registerNewUser = async (req,res) => {
@@ -35,7 +26,7 @@ const registerNewUser = async (req,res) => {
         
 
         if(!username.trim() || !email.trim() || !password.trim()){
-            return res.status(400).json({message: 'all fields are required'})
+            return res.status(400).json({message: 'all fields are required',success:false})
         }
 
         const user = await addNewUser(req.body); // function ==> throw ==> goes to the catch block of this function
@@ -54,6 +45,8 @@ const registerNewUser = async (req,res) => {
 
     }catch(err){
 
+        console.log(err);
+        
         res.status(500).json({message: err.messge, success: false  })
 
     }
@@ -84,7 +77,6 @@ const loginUserAccount = async (req,res) => {
 
         const user = await loginUser(req.body);
 
-
         const token = jwt.sign({ userId:  user._id }, process.env.JWT_SECRET)
 
         res.cookie('HariToken', token, {
@@ -103,4 +95,4 @@ const loginUserAccount = async (req,res) => {
 }
 
 
-module.exports = { renderSignupPage , registerNewUser, renderLoginPage , loginUserAccount, renderHomePage};
+module.exports = { renderLandingPage,  renderSignupPage , registerNewUser, renderLoginPage , loginUserAccount, renderHomePage};

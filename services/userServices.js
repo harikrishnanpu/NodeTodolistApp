@@ -24,7 +24,7 @@ const addNewUser = async (userData) => {
         const hashedPassword = await bcrypt.hash(password,10);
 
         user.password = hashedPassword
-        await user.save()
+        return await user.save()
 
     }catch(err){
         throw new Error(err.message)
@@ -46,6 +46,8 @@ const loginUser = async (userData) =>{
 
         if(!user){
             throw new Error('user not found')
+        }else if(user.isBlocked){
+            throw new Error('user account is blocked')
         }
 
         const compareResult = await bcrypt.compare(password, user.password)
