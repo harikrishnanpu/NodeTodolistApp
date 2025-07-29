@@ -1,10 +1,12 @@
 
 
 const express = require('express');
-const { renderSignupPage,registerNewUser, renderLoginPage, loginUserAccount, renderHomePage } = require('../controllers/userController');
-const { checkIsUserLoggedIn } = require('../middlewares/userAuthMiddleware');
+const { renderSignupPage,registerNewUser, renderLoginPage, loginUserAccount, renderHomePage, renderLandingPage } = require('../controllers/userController');
+const { checkIsUserLoggedIn, checkUserAndRedirect } = require('../middlewares/userAuthMiddleware');
 const userRouter = express.Router();
 
+
+userRouter.get('/', checkUserAndRedirect, renderLandingPage)
 
 userRouter.get('/home', checkIsUserLoggedIn , renderHomePage)
 
